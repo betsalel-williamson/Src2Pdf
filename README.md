@@ -1,5 +1,5 @@
-# diff-src
-Output a Code Diff to PDF
+# Code Diff to PDF
+Output a Code Diff to PDF.  The example input file is in the `example` folder.  It takes as input a text file with the previous and next version of a source code file.  Next, it runs the `latexdiff` utility to make a nice PDF output of the diff.
 
 ## Dependencies
 
