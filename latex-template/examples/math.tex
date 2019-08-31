@@ -1,0 +1,74 @@
+% Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%     * Redistributions of source code must retain the above copyright
+%       notice, this list of conditions and the following disclaimer.
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in the
+%       documentation and/or other materials provided with the distribution.
+%     * Neither the names of the Authors nor the
+%       names of its contributors may be used to endorse or promote products
+%       derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE Authors ``AS IS'' AND ANY
+% EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+% WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE Authors BE LIABLE FOR ANY
+% DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+% ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+\section{Example Math}
+
+\subsection{Simple equation with a number}
+
+I can reference this equation \ref{eqn:sample-dmath} by adding a unique label.
+
+\begin{dmath}
+\frac{V_{in}-V_x}{R_1}- \frac{V_x}{Z_1} + \frac{V_x - V_o}{Z_1} = 0
+\label{eqn:sample-dmath}
+\end{dmath}
+
+\subsection{A dmath group with no align}
+\begin{dgroup}[noalign]
+\begin{dmath}
+\frac{V_{in}-V_x}{R_1}- \frac{V_x}{Z_1} + \frac{V_x - V_o}{Z_1} = 0
+\end{dmath}
+\begin{dmath}
+\frac{V_{in}}{R_1} = -\frac{V_o}{R2} - \frac{V_o Z_1}{R_2 Z_1} - \frac{V_o}{Z_1}- \frac{Z_1 V_o}{R_1 R_2}
+\end{dmath}
+\label{eqn:sample-dgroup-noalign}
+\end{dgroup}
+
+\subsection{A dmath group with align on}
+
+\begin{dgroup}
+\begin{dmath}
+\frac{V_{in}-V_x}{R_1}- \frac{V_x}{Z_1} + \frac{V_x - V_o}{Z_1} = 0
+\end{dmath}
+\begin{dmath}
+\frac{V_{in}}{R_1} = -\frac{V_o}{R2} - \frac{V_o Z_1}{R_2 Z_1} - \frac{V_o}{Z_1}- \frac{Z_1 V_o}{R_1 R_2}
+\end{dmath}
+\label{eqn:sample-dgroup}
+\end{dgroup}
+
+\subsection{In-line Math}
+Sample with math included in-line with text along with units. $f_0$ at 620 \si{\hertz}.
+
+\subsection{Symbols}
+
+\begin{dmath}
+\frac{4.3 \si{\volt}}{1 \si{\kilo\ohm}} = 4.3 \si{\milli\ampere}
+\end{dmath}
+
+\subsection{Math With Normal Text}
+
+\begin{dmath}
+\text{Average rate of speech} = \frac{\text{Words spoken}}{\text{Number of Seconds}}
+\label{eqn:sample-math-with-regular-text}
+\end{dmath}

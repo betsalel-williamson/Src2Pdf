@@ -1,0 +1,10 @@
+../diff-src.tcl
+../diff-src.tcl
+./v1/c file.c
+
+./v1/folder with space at end/tcl-file.tcl
+./v2/folder with space at end/tcl-file.tcl
+./v1/folder$with#Chars%;'!&/js-file.js
+./v2/folder with space at end/js-file.js
+
+./v2/folder$with#Chars%;'!&/sql-file.sql

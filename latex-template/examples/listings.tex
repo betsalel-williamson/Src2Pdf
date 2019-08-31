@@ -1,0 +1,48 @@
+% Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%     * Redistributions of source code must retain the above copyright
+%       notice, this list of conditions and the following disclaimer.
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in the
+%       documentation and/or other materials provided with the distribution.
+%     * Neither the names of the Authors nor the
+%       names of its contributors may be used to endorse or promote products
+%       derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE Authors ``AS IS'' AND ANY
+% EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+% WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE Authors BE LIABLE FOR ANY
+% DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+% ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+\section{Example Listings}
+\subsection{Listing With Caption}
+
+The following Listing has a caption and the language set to Matlab.
+
+\begin{lstlisting}[caption=Psudo code for echo cancellation.,language=matlab]
+% for a sampled signal y_1[n] create an output signal y_2[n] that will be the size of the input signal minus N samples, where N is the timeshift
+% skip the first N samples if N is greater than zero
+% Starting at the sample n, where n-N is the first sample of the signal y subtract to it y[n-N]*alpha, where alpha is a value between 0 and 1. 
+% Loop and increment n until the end of the signal y[n]
+\end{lstlisting}
+
+\subsection{Inline Listing}
+
+Matlab was used to read in an audio file as a vector with two channels using the \lstinline!audioread! function. This inline Listing will change the font to indicate that this text is meant to be code.
+
+\subsection{Listing from File}
+
+See the code in Listing \ref{code:listing-example}. The options have the label for reference, the caption, and the language set to Matlab. The file to be used is \lstinline!lab2_parta.m! in the \lstinline!listings! directory.
+
+\begin{lstlisting}[label=code:listing-example,language=tex]
+\lstinputlisting[label=code:z-transform,language=Matlab,caption=Code to find the transfer functions and to plot systems $H_1$ through $H_4$.]{listings/lab2_parta.m}
+\end{lstlisting}

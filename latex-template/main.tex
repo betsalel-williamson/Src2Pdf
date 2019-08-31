@@ -1,0 +1,101 @@
+% Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%     * Redistributions of source code must retain the above copyright
+%       notice, this list of conditions and the following disclaimer.
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in the
+%       documentation and/or other materials provided with the distribution.
+%     * Neither the names of the Authors nor the
+%       names of its contributors may be used to endorse or promote products
+%       derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE Authors ``AS IS'' AND ANY
+% EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+% WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE Authors BE LIABLE FOR ANY
+% DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+% ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+\UseRawInputEncoding
+\documentclass[10pt, oneside]{article}
+
+\input{packages}
+\input{macros}
+
+\title{Code Diff}
+
+\begin{document}
+\sloppy
+
+\begin{titlepage}
+% Cover Page: The cover page should show the experiment title and number, the date the experiment was performed, the date the report was written, and the names of the author(s).
+
+\center 
+\textsc{\LARGE Arros}\\[1.5cm] 
+\textsc{\Large Code Diff}\\[0.5cm] 
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Version XX Compared With YY 
+}\\[0.4cm] 
+\HRule \\[1.5cm]
+
+% \includegraphics[scale=.15]{logo.png}\\[1cm]
+
+\begin{center}
+\begin{tabular}{ c} 
+Author - \href{mailto:me@example.com}{me@example.com}
+\end{tabular}
+\end{center}
+
+\vfill
+Sample
+
+Diff Compiled on \today
+\vfill 
+
+\end{titlepage}
+
+\pdfbookmark{\contentsname}{Contents}
+
+\tableofcontents
+
+% \listoffigures
+\lstlistoflistings
+% \listoftables
+
+\newpage
+
+\input{body/00-introduction}
+\input{body/01-code}
+
+% \newpage
+% \input{instructions/index} this is used if there are specific instructions for the above files
+
+\newpage
+
+% References: Be sure to include all human references, text references, and web references that you used in completing the experiment and writing the report. Don't include circuit components or test equipment, but do include data sheets or user's manuals, if appropriate.
+% \addcontentsline{toc}{section}{References}
+
+% To include references that have not yet been cited uncomment
+% \nocite{*}
+
+% \printbibliography[]
+
+% Appendix: This is a catch-all section for compulsive report writers. Such individuals are seldom encouraged. 
+\appendix
+
+\newpage
+
+\input{body/02-appendix}
+
+% \input{examples/index}
+
+% needs the closing end document to close out
+\end{document}

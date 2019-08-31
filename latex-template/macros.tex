@@ -1,0 +1,60 @@
+% Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%     * Redistributions of source code must retain the above copyright
+%       notice, this list of conditions and the following disclaimer.
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in the
+%       documentation and/or other materials provided with the distribution.
+%     * Neither the names of the Authors nor the
+%       names of its contributors may be used to endorse or promote products
+%       derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE Authors ``AS IS'' AND ANY
+% EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+% WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE Authors BE LIABLE FOR ANY
+% DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+% ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+% used for subscripts in regular text
+\newcommand{\tsub}[1]{$_{\text{#1}}$}
+
+% used in the title page
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% invisible sections https://tex.stackexchange.com/questions/68272/make-section-headings-invisible
+\newcommand\invisiblesection[1]{%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \sectionmark{#1}}
+  
+% http://tex.stackexchange.com/questions/86248/how-can-i-input-a-file-without-getting-the-implicit-newline
+% this breaks inlining tools best to just use the line of code
+% issue: want to input files without the new line  
+% \newcommand\minput[1]{%
+%   \input{#1}%
+%   \ifhmode\ifnum\lastnodetype=11 \unskip\fi\fi}  
+  
+%%%%%%%%%  begin math expressions  %%%%%%%%%%%%%%%
+
+\newcommand{\laplace}[1]{\mathcal{L}\left\{#1\right\}}
+\newcommand{\invlap}[1]{\mathcal{L}^{-1}\left\{#1\right\}}
+
+\newcommand{\fourier}[1]{\mathcal{F}\left\{#1\right\}}
+\newcommand{\invfour}[1]{\mathcal{F}^{-1}\left\{#1\right\}}
+
+\newcommand\abs[1]{\left|#1\right|}
+\newcommand\p[1]{\left(#1\right)}
+\newcommand\pc[1]{\left\{#1\right\}}
+\newcommand\pb[1]{\left[#1\right]}
+
+\newcommand\mx[1]{\begin{dmath}#1\end{dmath}}
+
+%%%%%%%%%  end math expressions  %%%%%%%%%%%%%%%

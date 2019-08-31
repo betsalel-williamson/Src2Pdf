@@ -1,0 +1,136 @@
+% Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%     * Redistributions of source code must retain the above copyright
+%       notice, this list of conditions and the following disclaimer.
+%     * Redistributions in binary form must reproduce the above copyright
+%       notice, this list of conditions and the following disclaimer in the
+%       documentation and/or other materials provided with the distribution.
+%     * Neither the names of the Authors nor the
+%       names of its contributors may be used to endorse or promote products
+%       derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE Authors ``AS IS'' AND ANY
+% EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+% WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE Authors BE LIABLE FOR ANY
+% DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+% (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+% LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+% ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+% (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{etoolbox}
+\usepackage{multicol}
+
+% for the code style
+\usepackage{xcolor}
+\definecolor{diff_src_green}{rgb}{0,0.45490196078431,0}
+\definecolor{diff_src_gray}{rgb}{0.5,0.5,0.5}
+\definecolor{diff_src_red}{rgb}{0.76862745098039,0.10196078431373,0.08627450980392}
+\definecolor{diff_src_pink}{rgb}{0.66666666666667,0.05098039215686,0.56862745098039}
+
+% for using listing code in the document, used for matlab code in appendix
+\usepackage{listings}
+\lstloadlanguages{[tk]tcl,c,SQL,HTML}
+\lstset{frame=tb,
+  % language=,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  firstnumber=auto,
+  numbers=left,
+  numberstyle=\tiny\color{diff_src_gray},
+  keywordstyle=\color{diff_src_pink},
+  commentstyle=\color{diff_src_green},
+  stringstyle=\color{diff_src_red},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+  tabsize=3
+}
+
+\lstdefinelanguage{ECMAScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{diff_src_pink}\bfseries,
+  keywords=[2]{class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=2\color{darkdiff_src_gray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{diff_src_green}\ttfamily,
+  stringstyle=\color{diff_src_red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+% https://tex.stackexchange.com/questions/5091/what-to-do-to-switch-to-biblatex
+% \usepackage[style = ieee, urldate =comp]{biblatex}
+% \addbibresource[]{references.bib}% Syntax for version >= 1.2
+
+% allows use of page XX of YY
+% https://tex.stackexchange.com/questions/227/how-can-i-add-page-of-on-my-document
+\usepackage[lastpage,user]{zref}
+
+% makes the headers and footers filled with information
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\cfoot{\thepage\ of \zpageref{LastPage}}
+
+% allows the inclusion of PDFS in doc
+\usepackage{pdfpages}
+
+% configure language of paper
+\usepackage[english]{babel}
+
+% for more math symbols use
+% \usepackage{amsmath}
+
+% used to make the math equations line up and look prettier
+\usepackage{mathpazo}
+\usepackage[mathpazo]{flexisym}
+\usepackage{breqn}
+
+% used to allow the written units in the paper
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{E}}}
+
+% used to display figures with multiple images in the figure
+\usepackage{float}
+\usepackage[caption = false]{subfig}
+\usepackage{graphicx}
+% https://tex.stackexchange.com/questions/29039/how-to-limit-the-figure-caption-width
+\usepackage[margin=3cm]{caption}
+\captionsetup[lstlisting]{margin=0cm}
+
+% used for indentation of paragraphs
+\usepackage{parskip}
+
+% used for inline todo breakout sections
+\usepackage[colorinlistoftodos]{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+\usepackage{csquotes}
+  
+% http://tex.stackexchange.com/questions/86248/how-can-i-input-a-file-without-getting-the-implicit-newline
+% issue: want to input files without the new line
+\usepackage{filecontents}
+  
+\usepackage{indentfirst}
+\setlength{\parindent}{1.5cm}% too much in my eyes delete this
+                             % line and use the default ...
+
+% makes the links clickable
+\usepackage[bookmarks=true,breaklinks=true]{hyperref}
+\usepackage{bookmark}
+% fix for breaking url at - chars https://tex.stackexchange.com/questions/3033/forcing-linebreaks-in-url
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds}
+\makeatother
