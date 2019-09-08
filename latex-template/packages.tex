@@ -76,13 +76,13 @@
 
 % allows use of page XX of YY
 % https://tex.stackexchange.com/questions/227/how-can-i-add-page-of-on-my-document
-\usepackage[lastpage,user]{zref}
+\usepackage{lastpage}
 
 % makes the headers and footers filled with information
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \setlength{\headheight}{14pt}
-\cfoot{\thepage\ of \zpageref{LastPage}}
+\cfoot{\thepage\ of \pageref{LastPage}}
 
 % allows the inclusion of PDFS in doc
 \usepackage{pdfpages}
