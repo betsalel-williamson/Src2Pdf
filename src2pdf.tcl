@@ -79,7 +79,7 @@
 # preamble in latex file
 # don't include titles and latex things that aren't needed (bib, list of tables and figures)
 # run Expect spawn on PDF generation to interact with Latex and output latexdiff command
-#
+# explore the difference between running pdflatex and latexmk, use regular latexdiff and then run latexmk
 #
 # Common errors with latexdiff and latex:
 # LaTeX Error: File `ulem.sty' not found. 
