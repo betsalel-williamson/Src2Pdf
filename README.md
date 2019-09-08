@@ -1,7 +1,8 @@
 # Src2Pdf
 Output source code to PDF.  The example input file is in the `example` folder.  It takes as input a text file with the previous and next version of a source code file.  If in diff mode, it runs the `latexdiff` utility to make a nice PDF output of the diff.  Otherwise it just outputs the pdf using `latexmk`.
 
-Example output is at: <https://github.com/betsalel-williamson/Src2Pdf/blob/master/example/output.pdf>
+Example of regular output is at: <https://github.com/betsalel-williamson/Src2Pdf/blob/master/example/regular-output.pdf>
+Example of diff output is at: <https://github.com/betsalel-williamson/Src2Pdf/blob/master/example/diff-output.pdf>
 
 ## Dependencies
 
