@@ -1,5 +1,5 @@
 #!/usr/bin/tclsh
-# Filename: diff-src.tcl
+# Filename: src2pdf.tcl
 # Copyright (c) 2019, Betsalel (Saul) Williamson, Jordan Henderson (the Authors)
 # All rights reserved.
 #
@@ -38,6 +38,9 @@
 #	2019-08-30 Added input from text file to allow versions of code to be compared.
 #				Fixed issue with calling script from other locations.
 #	2019-08-30.2 Changed logic for generating added, removed, and change paths.
+#	2019-09-08 Changed file name to src2pdf.tcl from diff-src.tcl
+#				Added clean up proc to handle removing output in case of early exit
+#				
 #
 # the purpose for this diff tool:
 # take as input files of version X (previous) and of version Y (current)
@@ -81,11 +84,12 @@
 # Common errors with latexdiff and latex:
 # LaTeX Error: File `ulem.sty' not found. 
 #	missing tex package -> install with `tlmgr install PGK'
+#						-> For SUSE linux use YaST.  LaTex packages are prefixed with `texlive'
 # WARNING: Inconsistency in length of input string and parsed string
 #	Issue on Suse linux platform with texlive installed
 #	latexdiff at older version.  Update to version >= 1.3.  
 #   Download and install from https://www.ctan.org/tex-archive/support/latexdiff
-# Error with `diff-src.tcl' as input due to puts $fp "\\end\{lstlisting\}" 
+# Error with `src2pdf.tcl' as input due to puts $fp "\\end\{lstlisting\}" 
 # 	Latex assumed end of listing when the `{'s were not escaped 
 #
 # see https://blog.tcl.tk/1246 for Tcllib installation
@@ -95,11 +99,12 @@ package require fileutil
 
 set exitCode 3;# default unexpected exit
 
-set usage ": diff-src.tcl -i source-list-file.txt \[-o path-to-output.pdf\] \[-t\] \[-v\]\noptions:"
+set usage ": src2pdf.tcl \[-d\] -i source-list-file.txt \[-o path-to-output.pdf\] \[-t\] \[-v\]\noptions:"
 
 set parameters {
-	{i.arg	"" 				"Required argument.  Source list file.  Contains list of code files.  Relative paths must be relative to the file.  Format of file is that odd lines contain the previous versions of the source code file and even lines contain the next version.  Empty lines mean that the file was removed or added.\n\tDefault:"}
-	{o.arg 	"./output.pdf" 	"Optional.  Path and filename for result\n\tDefault: "}
+	{i.arg	"" 				"Required argument.  Source list file.  Contains list of code files.  Relative paths must be relative to the file.\n\tFor regular input, each line should contain relative paths to source files.\n\tFor diff file, the format of file is that odd lines contain the previous versions of the source code file and even lines contain the next version.  Empty lines mean that the file was removed or added.\n\tDefault:"}
+	{o.arg 	"./output.pdf" 	"Optional.  Path and filename for result.\n\tDefault: "}
+	{d 						"Use diff for input source list file."}
 	{v						"Optional.  Verbose output."}
 	{t						"Optional.  Keep temporary Latex output."}
 }
@@ -124,6 +129,14 @@ if {[catch {array set options [cmdline::getoptions ::argv $parameters $usage]}]}
 		set keepTmpOutput 0
 	}
 
+	if {  $options(d) } {
+		puts "Performing code src diff to pdf."
+		set diffMode 1
+	} else {
+		puts "Performing regular src to pdf."
+		set diffMode 0
+	}
+
 	if {[string length $options(o)] > 0} {
 		set outputFile [file normalize $options(o)]
 		puts "Output file set:\n$outputFile"
@@ -146,11 +159,11 @@ proc isLink { aFile } {
 }
 
 if { ! ${tcl_interactive} } { 
-    # not being interactive is not enough!
-    # we could be being included which makes us a script
-    # in which case argv0 would not apply
+    ;# not being interactive is not enough!
+    ;# we could be being included which makes us a script
+    ;# in which case argv0 would not apply
     set ::myName [info script]
-    #set myName ${argv0}
+    ;#set myName ${argv0}
 } else {
     set ::myName [info script]
 }
@@ -193,20 +206,26 @@ flush stdout
 
 proc prepTempDir {} {
 	global ::myBase
+	global diffMode
 	
-	# del prev, set magic string to avoid collision with existing dir for rm -rf
-	# TODO redo magic number if there was a collision and the tmp dir with 
-	# that number already exists.
+	;# del prev, set magic string to avoid collision with existing dir for rm -rf
+	;# TODO redo magic number if there was a collision and the tmp dir with 
+	;# that number already exists.
 	set magicNumber 	"latex-template-[expr {int(rand()*999999999999) + 1}]"
 	set tmpDir 			"tmp-$magicNumber"
 	exec rm -rf $tmpDir ;# this is dangerous if $tmpDir is set to another directory
 	exec mkdir -p $tmpDir
+
 	set latexPrevDir 	"$tmpDir/latex-prev/"
 	set latexCurDir 	"$tmpDir/latex-cur/"
 
-	# create latex and reference locations
-	exec cp -R ${::myBase}/latex-template $latexPrevDir
-	exec cp -R ${::myBase}/latex-template $latexCurDir
+	if {  $diffMode } {
+		;# create latex and reference locations
+		exec cp -R ${::myBase}/latex-template $latexPrevDir
+		exec cp -R ${::myBase}/latex-template $latexCurDir
+	} else {
+		exec cp -R ${::myBase}/latex-template $tmpDir
+	}
 
 	return [list [file normalize $latexPrevDir] [file normalize $latexCurDir] [file normalize $tmpDir]];
 }
@@ -216,6 +235,21 @@ set prevRoot 	[lindex $latexRoots 0]
 set curRoot 	[lindex $latexRoots 1]
 set tmpDir 		[lindex $latexRoots 2]
 
+proc cleanUp {keepTmpOutput} {
+	global tmpDir
+
+	if {[string length $tmpDir] > 0} {
+		if { $keepTmpOutput } {
+			puts "Keeping temporary LaTeX output at:\n$tmpDir"
+		} else {
+			puts -nonewline "Removing temporary LaTeX output..."
+			flush stdout
+			exec rm -r $tmpDir
+			puts "  Done."
+		}		
+	}
+}
+
 proc escapePathForLatex {s} {
   	global verboseOutput
 
@@ -224,12 +258,12 @@ proc escapePathForLatex {s} {
 		puts $s
 	}
 
-	# special characters in latex must be escaped
-    # \ { } & ^ $ % # _ ~
+	;# special characters in latex must be escaped
+    ;# \ { } & ^ $ % ;# _ ~
 
 	regsub -all {([\\\{\}&\^\$%#_~])} $s {\\\1} s
 
-	# add latex line breaks into paths
+	;# add latex line breaks into paths
 	regsub -all {([\\]?[\/&\^\$%#_~\-;'!])} $s {\1\\discretionary{}{}{}} s
 
 	if {  $verboseOutput } {
@@ -273,9 +307,9 @@ proc addCodeToFile {texFilePath sectionText bodyText codeFilePath} {
 	set fp [open $texFilePath a+]
 	puts $fp "\\section\{$sectionText\}"
 	puts $fp "$bodyText"
-	# puts $fp "\\label{sec:$captionText}"
-	# label=code:$fileName
-	# TODO ensure that the equivalent files have the same label to allow references to work correctly
+	;# puts $fp "\\label{sec:$captionText}"
+	;# label=code:$fileName
+	;# TODO ensure that the equivalent files have the same label to allow references to work correctly
 	set fp1 [open $codeFilePath r]
 	set fileData [read $fp1]
 	close $fp1
@@ -290,7 +324,7 @@ proc addCodeToFile {texFilePath sectionText bodyText codeFilePath} {
 	return;	
 }
 
-proc processInputFile {inputFile prevRoot curRoot} {
+proc processDiffInputFile {inputFile prevRoot curRoot} {
   	global verboseOutput
 
 	if {  $verboseOutput } {
@@ -299,7 +333,8 @@ proc processInputFile {inputFile prevRoot curRoot} {
 	if {[catch {exec dos2unix -q $inputFile} result]} {
 		puts "Error with converting line endings to Unix."
    		puts "Information about error: $::errorInfo"
-	   	puts $result	
+	   	puts $result
+	   	cleanUp 1	
 	   	exit 1
 	}
 
@@ -312,15 +347,12 @@ proc processInputFile {inputFile prevRoot curRoot} {
 
 	close $fpInputFile;   
 
-	set myList {}
-	set myList2 {}
-
-	# Change path to the input file source to ensure relative paths work
+	;# Change path to the input file source to ensure relative paths work
 	set curDir [exec pwd];
 	cd [file dirname $inputFile]
 
 	for { set i 0}  {$i < [llength $inputFileLines]} {incr i 2} {
-		# check to see if file was added/removed
+		;# check to see if file was added/removed
 
 		set norm1 [lindex $inputFileLines $i]
 		set norm1 [file normalize $norm1]
@@ -328,12 +360,13 @@ proc processInputFile {inputFile prevRoot curRoot} {
 		set norm2 [lindex $inputFileLines [expr $i+1]]
 		set norm2 [file normalize $norm2]
 
-		## both norm1 and norm2 cant be empty
+		;## both norm1 and norm2 cant be empty
 		set norm1Empty [expr ![string length $norm1]]
 		set norm2Empty [expr ![string length $norm2]]
 
 		if {$norm1Empty && $norm2Empty} {
 			puts "Error with input file.  Cannot have two blank lines $i and [expr $i+1]."
+		   	cleanUp 1
 			exit 1
 		} 
 
@@ -347,39 +380,39 @@ proc processInputFile {inputFile prevRoot curRoot} {
 			set curFileName [file tail $norm2]
 		}
 
-		# if added grab second line and insert to first that this was added
+		;# if added grab second line and insert to first that this was added
 		if {$norm1Empty} {
 			if {  $verboseOutput } {
 				puts "added:\n$norm2"
 			}
-			# prev
+			;# prev
 			addCodeToFile "$prevRoot/body/01-code.tex" "Added $curFileName" "New file: $curPathForLatex" "$norm2"
-			# cur
+			;# cur
 			addCodeToFile "$curRoot/body/01-code.tex" "Added $curFileName" "New file: $curPathForLatex" "$norm2"
 
-		# if removed grab first line and insert to next that this was removed
+		;# if removed grab first line and insert to next that this was removed
 		} elseif {$norm2Empty} {
 			if {  $verboseOutput } {
 				puts "removed:\n$norm1"
 			}
-			# prev
+			;# prev
 			addCodeToFile "$prevRoot/body/01-code.tex" "Removed $prevFileName" "Removed file: $prevPathForLatex" "$norm1"
-			# cur
+			;# cur
 			addCodeToFile "$curRoot/body/01-code.tex" "Removed $prevFileName" "Removed file: $prevPathForLatex" "$norm1"
 
-		# if directory path doesn't equal then add change path
+		;# if directory path doesn't equal then add change path
 		} elseif {[string compare [file dirname $norm1] [file dirname $norm2]] != 0} {
 			if {  $verboseOutput } {
 				puts "path changed:\n$norm1\n$norm2"
 			}
-			# prev
+			;# prev
 			addCodeToFile "$prevRoot/body/01-code.tex" "Changed Path $prevFileName" "Changed file path from: $prevPathForLatex to $curPathForLatex" "$norm1"
-			# cur
+			;# cur
 			addCodeToFile "$curRoot/body/01-code.tex" "Changed Path $curFileName" "Changed file path from: $prevPathForLatex to $curPathForLatex" "$norm2"
 		} else {
-			# prev
+			;# prev
 			addCodeToFile "$prevRoot/body/01-code.tex" "$prevFileName" "File path: $prevPathForLatex" "$norm1"
-			# cur
+			;# cur
 			addCodeToFile "$curRoot/body/01-code.tex" "$curFileName" "File path: $curPathForLatex" "$norm2"
 		}
 	}
@@ -393,14 +426,73 @@ proc processInputFile {inputFile prevRoot curRoot} {
 	return;
 }
 
-processInputFile $inputFile $prevRoot $curRoot
+proc processRegularInputFile {inputFile tmpDir} {
+  	global verboseOutput
+
+	if {  $verboseOutput } {
+		puts "\nProcessing input file..."
+	}	
+	if {[catch {exec dos2unix -q $inputFile} result]} {
+		puts "Error with converting line endings to Unix."
+   		puts "Information about error: $::errorInfo"
+	   	puts $result	
+	   	cleanUp 1
+	   	exit 1
+	}
+
+	set fpInputFile [open $inputFile]
+	set inputFileLines [split [read $fpInputFile] "\n"]
+	if {  $verboseOutput } {
+		puts "File lines: [llength $inputFileLines]"
+		puts "Input files $inputFileLines"
+	}		
+
+	close $fpInputFile;   
+
+	;# Change path to the input file source to ensure relative paths work
+	set curDir [exec pwd];
+	cd [file dirname $inputFile]
+
+	for { set i 0}  {$i < [llength $inputFileLines]} {incr i} {
+		;# check to see if file was added/removed
+
+		set norm1 [lindex $inputFileLines $i]
+		set norm1 [file normalize $norm1]
+
+		;## both norm1 and norm2 cant be empty
+		set norm1Empty [expr ![string length $norm1]]
+
+		if {$norm1Empty} {
+			puts "Error with input file.  Cannot have blank line $i."
+			exit 1
+		} 
+
+		set pathForLatex [escapePathForLatex $norm1]
+		set fileName [file tail $norm1]
+		addCodeToFile "$tmpDir/latex-template/body/01-code.tex" "$fileName" "File path: $pathForLatex" "$norm1"
+	}
+
+	cd $curDir
+
+	if {  $verboseOutput } {
+		puts "Finished looping through files..."
+	}
+
+	return;
+}
+
+if { $diffMode } {
+	processDiffInputFile $inputFile $prevRoot $curRoot
+} else {
+	processRegularInputFile $inputFile $tmpDir
+}
 
 proc inlineLatex {latexRoot} {
   	global verboseOutput
 	set prevDir [pwd]
 	set inlineMain 	"main2.tex"
 	set defaultMain "main.tex"
-	set defaultBib 	"references.bib"; #TODO still not sure if this needs to be a bbl or bib file
+	set defaultBib 	"references.bib"; ;#TODO still not sure if this needs to be a bbl or bib file
 	cd $latexRoot
 	exec latexpand --keep-comments --expand-bbl $defaultBib $defaultMain > $inlineMain
 	if {  $verboseOutput } {
@@ -411,15 +503,19 @@ proc inlineLatex {latexRoot} {
 	return $inlineMain;
 }
 
-# inline latex to make it easier to do the diff
-set inline 	[inlineLatex $prevRoot]
-set inline2 [inlineLatex $curRoot]
+if { $diffMode } {
+	;# inline latex to make it easier to do the diff
+	set inline 	[inlineLatex $prevRoot]
+	set inline2 [inlineLatex $curRoot]
+} else {
+	set inline 	[inlineLatex "$tmpDir/latex-template"]
+}
 
 if {  $verboseOutput } {
 	puts "Finished inlining files..."
 }
 
-puts "  Done."; # preparing latex files
+puts "  Done."; ;# preparing latex files
 
 # generate pdf
 # uses latexdiff-vc run in the temp folder
@@ -436,8 +532,17 @@ puts "If the following step hangs (more than 2 minutes) enter 'x' and hit enter.
 puts -nonewline "Generating PDF...                 "
 flush stdout
 
-# TODO investigate if there will be security issues with input sources being malicious from TCL or Latex
-set cmd "latexdiff-vc --pdf \"$prevRoot/$inline\" \"$curRoot/$inline2\""
+if { $diffMode } {
+	;# inline latex to make it easier to do the diff
+	;# TODO investigate if there will be security issues with input sources being malicious from TCL or Latex
+	set cmd "latexdiff-vc --pdf \"$prevRoot/$inline\" \"$curRoot/$inline2\""
+	set tmpOutputPdf "main2-diff.pdf"
+} else {
+	set cmd "latexmk -pdf \"$tmpDir/latex-template/$inline\""
+	set tmpOutputPdf "main2.pdf"
+}
+
+
 if { $verboseOutput } {
 	puts "Running command to generate PDF:"
 	puts $cmd
@@ -445,15 +550,16 @@ if { $verboseOutput } {
 
 if {[catch {exec {*}$cmd} result]} {
 
-	# report errors and warnings, 
-	# there shouldn't be any because we are generating everything here
-	# input code files shouldn't break anything
-	# todo change to expect script to allow interaction with above program in case something happens
-	# as of now the program halts if there is a latex warning that requries user engagement
+	;# report errors and warnings, 
+	;# ideally there shouldn't be any because we are generating everything here
+	;# but LaTex generation has many warnings that are a nuisance
+	;# input code files shouldn't break anything
+	;# todo change to expect script to allow interaction with above program in case something happens
+	;# as of now the program halts if there is a latex warning that requries user engagement
    	puts "\nInformation about error: $::errorInfo\n\n"
 
-    if {[file exists "$tmpDir/main2-diff.pdf"]} {
-		puts "Warning on diff generation!"
+    if {[file exists "$tmpDir/$tmpOutputPdf"]} {
+		puts "Warning on pdf generation!"
 		set exitCode 2    	
     } else {
 		puts stderr "Error!"
@@ -464,11 +570,11 @@ if {[catch {exec {*}$cmd} result]} {
     set exitCode 0
 }
 
-puts "  Done."; # generating PDF
+puts "  Done."; ;# generating PDF
 
-if {[file exists "$tmpDir/main2-diff.pdf"]} {
+if {[file exists "$tmpDir/$tmpOutputPdf"]} {
 	
-	exec mv "$tmpDir/main2-diff.pdf" $outputFile
+	exec mv "$tmpDir/$tmpOutputPdf" $outputFile
 
 	if {[file exists "$outputFile"]} {
 		puts "PDF created at:\n$outputFile"
@@ -483,13 +589,6 @@ if {[file exists "$tmpDir/main2-diff.pdf"]} {
 	set exitCode 1
 }
 
-if { $keepTmpOutput } {
-	puts "Keeping temporary LaTeX output at:\n$tmpDir"
-} else {
-	puts -nonewline "Removing temporary LaTeX output..."
-	flush stdout
-	exec rm -r $tmpDir
-	puts "  Done."
-}
+cleanUp $keepTmpOutput
 
 exit $exitCode

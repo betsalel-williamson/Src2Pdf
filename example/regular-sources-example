@@ -1,0 +1,4 @@
+../src2pdf.tcl
+./v2/folder with space at end/tcl-file.tcl
+./v2/folder with space at end/js-file.js
+./v2/folder$with#Chars%;'!&/sql-file.sql
