@@ -463,8 +463,7 @@ proc processRegularInputFile {inputFile tmpDir} {
 		set norm1Empty [expr ![string length $norm1]]
 
 		if {$norm1Empty} {
-			puts "Error with input file.  Cannot have blank line $i."
-			exit 1
+			continue;
 		} 
 
 		set pathForLatex [escapePathForLatex $norm1]
