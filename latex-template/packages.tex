@@ -59,7 +59,7 @@
   keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
   keywordstyle=\color{diff_src_pink}\bfseries,
   keywords=[2]{class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=2\color{darkdiff_src_gray}\bfseries,
+  ndkeywordstyle=2\color{darkgray}\bfseries,
   identifierstyle=\color{black},
   sensitive=false,
   comment=[l]{//},
@@ -76,16 +76,17 @@
 
 % allows use of page XX of YY
 % https://tex.stackexchange.com/questions/227/how-can-i-add-page-of-on-my-document
-\usepackage{lastpage}
+\usepackage{pageslts}
 
 % makes the headers and footers filled with information
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \setlength{\headheight}{14pt}
-\cfoot{\thepage\ of \pageref{LastPage}}
+% \cfoot{Page \thepage\ (\theCurrentPage) of \lastpageref{LastPage}}
+\cfoot{Page \thepage\ of \lastpageref{LastPage}}
 
 % allows the inclusion of PDFS in doc
-\usepackage{pdfpages}
+% \usepackage{pdfpages}
 
 % configure language of paper
 \usepackage[english]{babel}
