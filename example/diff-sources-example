@@ -1,5 +1,5 @@
-../diff-src.tcl
-../diff-src.tcl
+../src2pdf.tcl
+../src2pdf.tcl
 ./v1/c file.c
 
 ./v1/folder with space at end/tcl-file.tcl
