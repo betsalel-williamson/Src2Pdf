@@ -18,7 +18,7 @@ Example of diff output is at: <https://github.com/betsalel-williamson/Src2Pdf/bl
 
 Or:
 
-First `chmod +x` the `src2pdf.tcl` script.  Then run `src2pdf.tcl -i ./example/regular-sources-example -o ./example/regular-output.pdf`
+First `chmod +x` the `src2pdf.tcl` script.  Then run `./src2pdf.tcl -i ./example/regular-sources-example -o ./example/regular-output.pdf`
 
 ## Diff Mode
 
@@ -26,4 +26,4 @@ First `chmod +x` the `src2pdf.tcl` script.  Then run `src2pdf.tcl -i ./example/r
 
 Or:
 
-First `chmod +x` the `src2pdf.tcl` script.  Then run `src2pdf.tcl -d -i ./example/diff-sources-example -o ./example/diff-output.pdf`
+First `chmod +x` the `src2pdf.tcl` script.  Then run `./src2pdf.tcl -d -i ./example/diff-sources-example -o ./example/diff-output.pdf`
