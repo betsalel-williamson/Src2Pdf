@@ -23,6 +23,8 @@
 % (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+\usepackage[utf8]{inputenc}
+
 \usepackage[letterpaper, margin=1in]{geometry}
 \usepackage{etoolbox}
 \usepackage{multicol}
@@ -35,6 +37,7 @@
 \definecolor{diff_src_pink}{rgb}{0.66666666666667,0.05098039215686,0.56862745098039}
 
 % for using listing code in the document, used for matlab code in appendix
+\usepackage{textcomp}
 \usepackage{listings}
 \lstloadlanguages{[tk]tcl,c,SQL,HTML}
 \lstset{frame=tb,
@@ -51,8 +54,9 @@
   commentstyle=\color{diff_src_green},
   stringstyle=\color{diff_src_red},
   breaklines=true,
-  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
-  tabsize=3
+  % postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+  tabsize=3,
+  upquote=true
 }
 
 \lstdefinelanguage{ECMAScript}{
@@ -62,13 +66,14 @@
   ndkeywordstyle=2\color{darkgray}\bfseries,
   identifierstyle=\color{black},
   sensitive=false,
-  comment=[l]{//},
-  morecomment=[s]{/*}{*/},
   commentstyle=\color{diff_src_green}\ttfamily,
   stringstyle=\color{diff_src_red}\ttfamily,
+  string=[b]",
   morestring=[b]',
-  morestring=[b]"
-}
+  morestring=[b][keywordstyle]/,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  }
 
 % https://tex.stackexchange.com/questions/5091/what-to-do-to-switch-to-biblatex
 % \usepackage[style = ieee, urldate =comp]{biblatex}
