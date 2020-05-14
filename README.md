@@ -9,9 +9,19 @@ Example of diff output is at: <https://github.com/betsalel-williamson/Src2Pdf/bl
 ## Dependencies
 
 1. TCL >= 8.5.9
-1. TexLive
+1. TeXLive or MacTeX
 1. LatexDiff >= 1.3
 1. dos2unix
+
+### Mac Install Instructions
+
+Use Homebrew to instal the following items.
+
+```
+brew cask install mactex
+brew install LatexDiff
+brew install dos2unix
+```
 
 ## Regular Mode
 
