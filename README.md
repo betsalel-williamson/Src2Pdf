@@ -15,7 +15,7 @@ Example of diff output is at: <https://github.com/betsalel-williamson/Src2Pdf/bl
 
 ### Mac Install Instructions
 
-Use Homebrew to instal the following items.
+Use Homebrew to install the following items.
 
 ```
 brew cask install mactex
