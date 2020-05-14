@@ -8,7 +8,7 @@ Example of diff output is at: <https://github.com/betsalel-williamson/Src2Pdf/bl
 
 ## Dependencies
 
-1. TCL >= 8.6
+1. TCL >= 8.5.9
 1. TexLive
 1. LatexDiff >= 1.3
 1. dos2unix
