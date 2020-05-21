@@ -25,6 +25,10 @@ brew install dos2unix
 
 ## Regular Mode
 
+Create text file with list of files. Each line should have one file path.
+
+Then run:
+
 `tclsh src2pdf.tcl -i ./example/regular-sources-example -o ./example/regular-output.pdf`
 
 Or:
@@ -33,8 +37,18 @@ First `chmod +x` the `src2pdf.tcl` script.  Then run `./src2pdf.tcl -i ./example
 
 ## Diff Mode
 
+Create text file with list of file pairs (old version followed by new version).  If a file is new, then the previous line should be blank.  If the file was deleted, the following line should be blank.
+
+Then run:
+
 `tclsh src2pdf.tcl -d -i ./example/diff-sources-example -o ./example/diff-output.pdf`
 
 Or:
 
 First `chmod +x` the `src2pdf.tcl` script.  Then run `./src2pdf.tcl -d -i ./example/diff-sources-example -o ./example/diff-output.pdf`
+
+## Appendix
+
+To find files you can run:
+
+`find . -regex ".*[.][h]?[st]?[cjmq]?[csl]"`
