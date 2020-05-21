@@ -51,4 +51,4 @@ First `chmod +x` the `src2pdf.tcl` script.  Then run `./src2pdf.tcl -d -i ./exam
 
 To find files you can run:
 
-`find . -regex ".*[.][h]?[st]?[cjmq]?[csl]"`
+`find . -regex ".*[.](html|sql|tcl|js|c|h)"`
